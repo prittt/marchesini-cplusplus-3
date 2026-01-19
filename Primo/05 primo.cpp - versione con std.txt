@@ -1,0 +1,110 @@
+#include <cassert>
+#include <cstdlib>
+#include <cstdio>
+#include <cstdbool>
+
+#include <algorithm>
+#include <fstream>
+#include <print>
+#include <ostream>
+
+namespace marchesini_group {
+
+template<typename T>
+struct vector {
+    T* data_;
+    size_t n_;
+
+    vector() {
+        data_ = nullptr;
+        n_ = 0;
+    }
+    vector(size_t dim) {
+        n_ = dim;
+        data_ = new T[n_];
+    }
+    vector(const vector &other) {
+        n_ = other.n_;
+        data_ = new T[n_];
+        std::copy_n(other.data_, n_, data_);
+    }
+    vector& operator=(const vector &rhs) {
+        if (n_ < rhs.n_) {
+            delete[] data_;
+            data_ = new T[rhs.n_];
+        }
+        n_ = rhs.n_;
+        std::copy_n(rhs.data_, n_, data_);
+        return *this;
+    }
+    ~vector() {
+        delete[] data_;
+    }
+    void pushback(const T& val) {
+        // Alloco lo spazio per la nuova memoria
+        T* newmem = new T[n_ + 1];
+        // Copio lì dentro i dati vecchi
+        std::copy_n(data_, n_, newmem);
+        // Libero la vecchia memoria
+        delete[] data_;
+        n_++;
+        data_ = newmem;
+        data_[n_ - 1] = val;
+    }
+    size_t size() const {
+        return n_;
+    }
+    const T& at(size_t pos) const {
+        assert(pos < n_);
+        return data_[pos];
+    }
+    T& operator[](size_t pos) {
+        return data_[pos];
+    }
+    const T& operator[](size_t pos) const {
+        return data_[pos];
+    }
+};
+
+}
+
+int main(int argc, char *argv[])
+{    
+    namespace mg = marchesini_group;
+
+    // Controllo il numero di argomenti
+    if (argc != 3) {
+        return 1;
+    }
+    // Creo un vettore vuoto
+    mg::vector<int> v;
+    // Apro il file (RAII)
+    std::ifstream is(argv[1]);
+    if (!is) {
+        return 1;
+    }
+    // Leggo il contenuto 
+    int val;
+    while (is >> val) {
+        // Ho un valore, allora lo aggiungo in coda al vettore
+        v.pushback(val);
+    }    
+
+    // Creo il nuovo file
+    std::ofstream os(argv[2]);
+    if (!os) {
+        return 1;
+    }
+    // Scrivo i valori su file
+    for (size_t i = 0; i < v.size(); ++i) {
+        //os << v[i] << '\n';
+        std::println(os, "{}", v[i]);
+    }
+
+    mg::vector<double> x(3);
+    x[0] = 3.5;
+    x[1] = 9;
+    x[2] = 11.999;
+
+    return 0;
+}
