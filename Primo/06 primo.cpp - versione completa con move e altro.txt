@@ -1,0 +1,172 @@
+#include <cassert>
+
+#include <algorithm>
+#include <fstream>
+#include <print>
+#include <ostream>
+#include <string>
+#include <iostream>
+
+namespace marchesini_group {
+
+template<typename T>
+class vector {
+    size_t n_;
+    size_t capacity_;
+    T* data_;
+
+public:
+    vector() {        
+        std::cout << "Costruttore di default\n";
+        n_ = 0;
+        capacity_ = 4;
+        data_ = new T[capacity_];
+    }
+    vector(size_t dim) {
+        std::cout << "Costruttore con parametro\n";
+        n_ = dim;
+        capacity_ = dim;
+        data_ = new T[capacity_];
+    }
+    vector(const vector &other) {
+        std::cout << "Costruttore di copia\n";
+        n_ = other.n_;
+        capacity_ = other.capacity_;
+        data_ = new T[capacity_];
+        std::copy_n(other.data_, n_, data_);
+    }
+    vector(vector &&other) noexcept {
+        std::cout << "Costruttore di move\n";
+        n_ = other.n_;
+        data_ = other.data_;
+        other.data_ = nullptr;
+    }
+    vector& operator=(vector rhs) {
+        swap(*this, rhs);
+        return *this;
+    }
+    ~vector() {
+        std::cout << "Distruttore\n";
+        delete[] data_;
+    }
+    void pushback(const T& val) {
+        n_++;
+        // Alloco lo spazio per la nuova memoria?
+        if (n_ > capacity_) {
+            capacity_ *= 2;
+            T* newmem = new T[capacity_];
+            // Copio lì dentro i dati vecchi
+            std::copy_n(data_, n_ - 1, newmem);
+            // Libero la vecchia memoria
+            delete[] data_;
+            data_ = newmem;
+        }
+        data_[n_ - 1] = val;
+    }
+    void shrink_to_fit() {
+        if (n_ < capacity_) {
+            capacity_ = n_;
+            T* newmem = new T[capacity_];
+            std::copy_n(data_, n_, newmem);
+            // Libero la vecchia memoria
+            delete[] data_;
+            data_ = newmem;
+        }
+    }
+    size_t size() const {
+        return n_;
+    }
+    const T& at(size_t pos) const {
+        assert(pos < n_);
+        return data_[pos];
+    }
+    T& operator[](size_t pos) {
+        return data_[pos];
+    }
+    const T& operator[](size_t pos) const {
+        return data_[pos];
+    }
+
+    template<typename T>
+    friend void swap(vector<T> &left, vector<T> &right);
+};
+
+template<typename T>
+void swap(vector<T> &left, vector<T> &right) {
+    using std::swap; // Enables ADL (Argument-Dependent Lookup)
+    swap(left.n_, right.n_);
+    swap(left.data_, right.data_);
+}
+
+}
+
+namespace mg = marchesini_group;
+
+struct myint {
+    int val_;
+    myint() { 
+        val_ = 42;
+    }
+    myint(const myint& m) { 
+        val_ = m.val_;
+    }
+    myint(int val) {
+        val_ = val;
+    }
+};
+
+std::ostream& operator<<(std::ostream& os, const myint& x) {
+    os << '[' << x.val_ << ']';
+    return os;
+}
+
+mg::vector<myint> leggi_numeri(const std::string& filename)
+{
+    // Apro il file (RAII)
+    std::ifstream is(filename);
+    if (!is) {
+        return mg::vector<myint>();
+    }
+    // Leggo il contenuto 
+    mg::vector<myint> v;
+    int val;
+    while (is >> val) {
+        // Ho un valore, allora lo aggiungo in coda al vettore
+        v.pushback(val);
+    }    
+    return v;
+}
+
+
+int main(int argc, char *argv[])
+{    
+    // Controllo il numero di argomenti
+    if (argc != 3) {
+        return 1;
+    }
+    // Creo un vettore vuoto
+    mg::vector<myint> v;
+    // Leggo il file
+    v = leggi_numeri(argv[1]);
+    if (v.size() == 0) {
+        return 1;
+    }
+    mg::vector<myint> x(3);
+    x[0] = 12;
+    x[1] = 27;
+    x[2] = 31;
+    x = v;
+
+    // Creo il nuovo file
+    std::ofstream os(argv[2]);
+    if (!os) {
+        return 1;
+    }
+    // Scrivo i valori su file
+    for (size_t i = 0; i < v.size(); ++i) {
+        os << v[i] << '\n';
+        //std::println(os, "{}", v[i]);
+    }
+
+    return 0;
+}
