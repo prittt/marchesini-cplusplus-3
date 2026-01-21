@@ -1,0 +1,103 @@
+#include <algorithm>
+#include <fstream>
+#include <print>
+#include <ostream>
+#include <string>
+#include <iostream>
+#include <vector>
+#include <list>
+#include <deque>
+#include <set>
+#include <array>
+#include <iterator>
+
+struct myint {
+    int val_;
+    myint() { 
+        val_ = 42;
+    }
+    myint(const myint& m) { 
+        val_ = m.val_;
+    }
+    myint(int val) {
+        val_ = val;
+    }
+    bool operator<(const myint& other) const {
+        return val_ < other.val_;
+    }
+};
+
+std::ostream& operator<<(std::ostream& os, const myint& x) {
+    os << '[' << x.val_ << ']';
+    return os;
+}
+
+struct cmp_ref {
+    int ref_;
+    cmp_ref(int ref) {
+        ref_ = ref;
+    }
+    bool operator()(int a, int b) const {
+        int dista = abs(a - ref_);
+        int distb = abs(b - ref_);
+        return dista < distb;
+    }
+};
+
+int main(int argc, char *argv[])
+{    
+    // Controllo il numero di argomenti
+    if (argc != 3) {
+        return 1;
+    }
+    // Apro il file (RAII)
+    std::ifstream is(argv[1]);
+    if (!is) {
+        return 1;
+    }
+    // Leggo il contenuto 
+    std::vector<myint> v;
+
+    std::istream_iterator<int> first(is);
+    std::istream_iterator<int> last;
+    // for (auto it = begin; it != end; ++it) {
+    //     v.push_back(*it);
+    // }
+    copy(first, last, back_inserter(v));
+
+    // 1, 2, 3, 4, 5, 6, 7, 8, 9
+    std::array<int, 9> a = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+    //qsort(a, 9, sizeof(int), cmp_ref);
+    // 5, 4, 6, 3, 7, 2, 8, 1, 9
+    // 0  1  1  2  2  3  3  4  4
+    //std::sort(std::begin(a), std::end(a), cmp_ref(5));
+    int dista = 20;
+    int ref = 5;
+    sort(begin(a), end(a), 
+        [&](int a, int b) {
+            int dista = abs(a - ref);
+            int distb = abs(b - ref);
+            return dista < distb;
+        }
+    );
+
+
+    // Ordino il vettore
+    sort(begin(v), end(v), 
+        [](const myint& a, const myint& b) {
+            return a.val_ > b. val_;
+        }
+    );
+
+    // Creo il nuovo file
+    std::ofstream os(argv[2]);
+    if (!os) {
+        return 1;
+    }
+    // Scrivo i valori su file
+    for (const auto& x : v) {
+        os << x << '\n';
+    }
+
+    return 0;
+}
