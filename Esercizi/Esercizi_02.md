@@ -1,4 +1,4 @@
-# Esercizio 1 - Alfabeto Farfallino
+# Esercizio 8 - Alfabeto Farfallino
 
 Nei file `farfallino.h` e `farfallino.cpp` implementare la definizione della seguente funzione:
 
@@ -9,7 +9,7 @@ std::string CodificaFarfallino(const std::string& input);
 La funzione accetta una stringa e ritorna una stringa contenente quella originale codificata con l'Alfabeto Farfallino. 
 L'Alfabeto Farfallino è un gioco linguistico per bambini che consiste nel raddoppiare ogni vocale con l'aggiunta di una *f* interposta: per esempio, `"a"` diventa `"afa"`, `"e"` diventa `"efe"`, e così via (quindi `"ciao"` diventa `"cifiafaofo"`). 
 
-# Esercizio 2 - Traduci
+# Esercizio 9 - Traduci
 
 Nei file `translate.h` e `translate.cpp` implementare la seguente funzione:
 
@@ -21,7 +21,7 @@ La funzione deve cercare ogni carattere di `s` in `from_lst` e se il carattere �
 
 Se `from_lst` e `to_lst` hanno lunghezze diverse, la funzione non modifica `s`.
 
-# Esercizio 3 - Conta Parole
+# Esercizio 10 - Conta Parole
 
 Nei file `conta.h` e `conta.cpp` implementare la funzione:
 
@@ -34,7 +34,7 @@ La funzione accetta come parametro una stringa e deve restituire quante parole s
 Ad esempio, chiamare la funzione passando la stringa `"  Questa e' una stringa lunga 45 caratteri.  "` dovrebbe ritornare 7. Con la stringa `"1 2 3 a b c"` dovrebbe ritornare 6. Con la stringa `"! @?$ ciao,prova"` dovrebbe ritornare 3.
 
 
-# Esercizio 4 - Hex String
+# Esercizio 11 - Hex String
 
 Creare i file `hexstring.h` e `hexstring.cpp` che consentano di utilizzare la seguente funzione:
 
@@ -56,7 +56,7 @@ s                  | out
 
 La stringa `s` sarà sempre formattata correttamente, ovvero conterrà solo lettere da A a F minuscole o maiuscole o numeri, conterrà sempre un numero pari di cifre esadecimali e mai superiore a 16.
 
-# Esercizio 5 - Rimuovi Singoli Spazi
+# Esercizio 12 - Rimuovi Singoli Spazi
 
 Nei file `rimuovi_singoli_spazi.h` e `rimuovi_singoli_spazi.cpp` definire la funzione:
 
@@ -80,7 +80,7 @@ Input: "  abc   def ghi   jkl    mno pqr  s "
 Output: "  abc   defghi   jkl    mnopqr  s"
 ```
 
-# Esercizio 6 - Formato Data
+# Esercizio 13 - Formato Data
 
 Nei file `formato.h` e `formato.cpp` definire la funzione: 
 
