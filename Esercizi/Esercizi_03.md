@@ -5,10 +5,11 @@ Si implementi la classe `Rational` che consenta di rappresentare dei numeri razi
 ## Costruzione e Normalizzazione
 
 - Deve essere possibile costruire un oggetto `Rational` specificando:
-  - Solo il numeratore (numero intero)
-  - Entrambi i valori (numeratore e denominatore)
-- Quando viene costruito un oggetto `Rational`, il numero deve essere automaticamente normalizzato
-- Il segno deve essere sempre incluso solo nel numeratore
+  - Solo il numeratore (numero intero);
+  - Entrambi i valori (numeratore e denominatore);
+- Quando viene costruito un oggetto `Rational`, il numero deve essere automaticamente normalizzato;
+- Il segno deve essere sempre incluso solo nel numeratore;
+- Se il costruttore viene invocato con denominatore `0`, il programma genera un'eccezione.
 
 **Esempio:** Se venisse chiamato il costruttore `Rational r{24, -12}`, questo dovrebbe memorizzare il numero normalizzato `{-2, 1}`.
 
