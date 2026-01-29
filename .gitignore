@@ -2,3 +2,11 @@
 *.ilk
 *.obj
 *.pdb
+
+# Build directory
+build/
+
+# VS Code
+.vscode/
+!.vscode/tasks.json
+!.vscode/launch.json
